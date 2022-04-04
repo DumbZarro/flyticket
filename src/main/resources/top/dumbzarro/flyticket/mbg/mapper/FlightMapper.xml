@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.dumbzarro.flyticket.mbg.mapper.FlightMapper">
+  <resultMap id="BaseResultMap" type="top.dumbzarro.flyticket.mbg.model.Flight">
+    <id column="flight_id" jdbcType="INTEGER" property="flightId" />
+    <result column="plane_id" jdbcType="INTEGER" property="planeId" />
+    <result column="start_t" jdbcType="TIMESTAMP" property="startT" />
+    <result column="end_t" jdbcType="TIMESTAMP" property="endT" />
+    <result column="origin" jdbcType="VARCHAR" property="origin" />
+    <result column="destination" jdbcType="VARCHAR" property="destination" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    flight_id, plane_id, start_t, end_t, origin, destination
+  </sql>
+  <select id="selectByExample" parameterType="top.dumbzarro.flyticket.mbg.model.FlightExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from flight
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from flight
+    where flight_id = #{flightId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from flight
+    where flight_id = #{flightId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="top.dumbzarro.flyticket.mbg.model.FlightExample">
+    delete from flight
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="top.dumbzarro.flyticket.mbg.model.Flight">
+    <selectKey keyProperty="flightId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into flight (plane_id, start_t, end_t, 
+      origin, destination)
+    values (#{planeId,jdbcType=INTEGER}, #{startT,jdbcType=TIMESTAMP}, #{endT,jdbcType=TIMESTAMP}, 
+      #{origin,jdbcType=VARCHAR}, #{destination,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="top.dumbzarro.flyticket.mbg.model.Flight">
+    <selectKey keyProperty="flightId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into flight
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="planeId != null">
+        plane_id,
+      </if>
+      <if test="startT != null">
+        start_t,
+      </if>
+      <if test="endT != null">
+        end_t,
+      </if>
+      <if test="origin != null">
+        origin,
+      </if>
+      <if test="destination != null">
+        destination,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="planeId != null">
+        #{planeId,jdbcType=INTEGER},
+      </if>
+      <if test="startT != null">
+        #{startT,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endT != null">
+        #{endT,jdbcType=TIMESTAMP},
+      </if>
+      <if test="origin != null">
+        #{origin,jdbcType=VARCHAR},
+      </if>
+      <if test="destination != null">
+        #{destination,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="top.dumbzarro.flyticket.mbg.model.FlightExample" resultType="java.lang.Integer">
+    select count(*) from flight
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update flight
+    <set>
+      <if test="record.flightId != null">
+        flight_id = #{record.flightId,jdbcType=INTEGER},
+      </if>
+      <if test="record.planeId != null">
+        plane_id = #{record.planeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.startT != null">
+        start_t = #{record.startT,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endT != null">
+        end_t = #{record.endT,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.origin != null">
+        origin = #{record.origin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.destination != null">
+        destination = #{record.destination,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update flight
+    set flight_id = #{record.flightId,jdbcType=INTEGER},
+      plane_id = #{record.planeId,jdbcType=INTEGER},
+      start_t = #{record.startT,jdbcType=TIMESTAMP},
+      end_t = #{record.endT,jdbcType=TIMESTAMP},
+      origin = #{record.origin,jdbcType=VARCHAR},
+      destination = #{record.destination,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="top.dumbzarro.flyticket.mbg.model.Flight">
+    update flight
+    <set>
+      <if test="planeId != null">
+        plane_id = #{planeId,jdbcType=INTEGER},
+      </if>
+      <if test="startT != null">
+        start_t = #{startT,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endT != null">
+        end_t = #{endT,jdbcType=TIMESTAMP},
+      </if>
+      <if test="origin != null">
+        origin = #{origin,jdbcType=VARCHAR},
+      </if>
+      <if test="destination != null">
+        destination = #{destination,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where flight_id = #{flightId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.dumbzarro.flyticket.mbg.model.Flight">
+    update flight
+    set plane_id = #{planeId,jdbcType=INTEGER},
+      start_t = #{startT,jdbcType=TIMESTAMP},
+      end_t = #{endT,jdbcType=TIMESTAMP},
+      origin = #{origin,jdbcType=VARCHAR},
+      destination = #{destination,jdbcType=VARCHAR}
+    where flight_id = #{flightId,jdbcType=INTEGER}
+  </update>
+</mapper>
