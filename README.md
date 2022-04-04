@@ -1,6 +1,10 @@
 # flyticket
 flyticket manager demo
 
+方案: SpringBoot + MyBatis + SpringSecurity + JWT 
+
+参考博客(登陆验证部分):https://blog.csdn.net/weixin_45654405/article/details/123954041
+
 application.yml 和 generator.properties自行补充
 
 # application.yml
